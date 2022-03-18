@@ -5,7 +5,7 @@ import time
 import tqdm
 import sqlite3
 
-centroids_f = open("data/us_centroids_100mile_radius.csv")
+centroids_f = open("data/us_centroids_50mile_radius.csv")
 centroids = []
 
 
