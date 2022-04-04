@@ -64,8 +64,8 @@ for centroid in tqdm.tqdm(centroids):
     if r.text.startswith("{"):
         mcdonalds = r.json()["features"]
         for mcdonald in mcdonalds:
-            stores.append((mcdonald["properties"]["identifierValue"], mcdonald["geometry"]["coordinates"][0],
-                           mcdonald["geometry"]["coordinates"][1],
+            stores.append((mcdonald["properties"]["identifierValue"], mcdonald["geometry"]["coordinates"][1],
+                           mcdonald["geometry"]["coordinates"][0],
                            get_if_exists(mcdonald["properties"], "shortDescription"),
                            get_if_exists(mcdonald["properties"], "longDescription"),
                            get_if_exists(mcdonald["properties"], "addressLine1"),
