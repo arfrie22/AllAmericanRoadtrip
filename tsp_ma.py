@@ -3,14 +3,21 @@ from matplotlib import image
 from matplotlib import pyplot as plt
   
 data = image.imread('data/world.200412.3x5400x2700.jpg')
+
 con = sqlite3.connect('data/mc_donalds.db')
 cur = con.cursor()
-cur.execute('select * from us')
+cur.execute('select * from us where sub_division="MA"')
 
 lats = []
 longs = []
+stores = []
 
 for result in cur:
+    stores.append({
+        "x": result[2],
+        "y": result[1],
+        "store_id": result[0]
+    })
     lats.append(result[1])
     longs.append(result[2])
 
