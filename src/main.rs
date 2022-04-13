@@ -1,4 +1,5 @@
 use sqlite::State;
+use sqlite::Value;
 
 fn main() {
     let connection = sqlite::open("file:data/mc_donalds.db").unwrap();
@@ -13,5 +14,10 @@ fn main() {
         stores.push(statement.read::<i64>(0).unwrap());
     }
 
-    
+    statement.drop();
+
+    statement = connection.prepare("select * from us where id_from=?").unwrap();
+
+    let id = 1;
+    statement.cursor().bind(&[Value::Integer(id)]).unwrap()
 }
