@@ -8,13 +8,13 @@ import os
 import tqdm
 
 os.makedirs('frames', exist_ok=True)  
-data = mpl.image.imread('data/world.200412.3x5400x2700.jpg')
+data = mpl.image.imread('../data/world.200412.3x5400x2700.jpg')
 # PIL.Image.MAX_IMAGE_PIXELS = None
 # data = image.imread('data/Full Map.jpg')
 height = len(data)
 width = len(data[0])
 
-con = sqlite3.connect('data/mc_donalds.db')
+con = sqlite3.connect('../data/mc_donalds.db')
 cur = con.cursor()
 cur.execute('select * from us where sub_division="MA"')
 plt.figure(figsize=(width/100, height/100))

@@ -2,8 +2,8 @@ import sqlite3
 from matplotlib import image
 from matplotlib import pyplot as plt
   
-data = image.imread('data/world.200412.3x5400x2700.jpg')
-con = sqlite3.connect('data/mc_donalds.db')
+data = image.imread('../data/world.200412.3x5400x2700.jpg')
+con = sqlite3.connect('../data/mc_donalds.db')
 cur = con.cursor()
 cur.execute('select * from us')
 

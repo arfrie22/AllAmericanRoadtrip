@@ -15,7 +15,7 @@ def deg2rad(deg):
   return deg * (math.pi/180)
 
 
-con = sqlite3.connect('data/mc_donalds.db')
+con = sqlite3.connect('../data/mc_donalds.db')
 cur = con.cursor()
 cur.execute('''
 create table if not exists us_distances_pythagorean (

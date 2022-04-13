@@ -5,7 +5,7 @@ import time
 import tqdm
 import sqlite3
 
-centroids_f = open("data/us_centroids_50mile_radius.csv")
+centroids_f = open("../data/us_centroids_50mile_radius.csv")
 centroids = []
 
 
@@ -23,7 +23,7 @@ for row in csv_reader:
         centroids.append([row[1], row[2]])
     line_count += 1
 
-con = sqlite3.connect('data/mc_donalds.db')
+con = sqlite3.connect('../data/mc_donalds.db')
 cur = con.cursor()
 cur.execute('''
 create table if not exists us (
