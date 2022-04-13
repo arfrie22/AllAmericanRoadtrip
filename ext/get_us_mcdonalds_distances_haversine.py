@@ -18,7 +18,7 @@ def deg2rad(deg):
 con = sqlite3.connect('../data/mc_donalds.db')
 cur = con.cursor()
 cur.execute('''
-create table if not exists us_distances_pythagorean (
+create table if not exists us_distances_haversine (
 	id_from int not null,
 	id_to int not null,
 	distance double not null,
@@ -45,10 +45,10 @@ for store_from in tqdm.tqdm(stores):
         data.append([store_from[0], store_to[0], getDistanceFromLatLonInKm(store_from[1], store_from[2], store_to[1], store_to[2])])
 
         if len(data) > 10000:
-                cur.executemany("insert or ignore into us_distances_pythagorean values (?, ?, ?)", data)
+                cur.executemany("insert or ignore into us_distances_haversine values (?, ?, ?)", data)
                 con.commit()
                 data = []
 
-cur.executemany("insert or ignore into us_distances_pythagorean values (?, ?, ?)", data)
+cur.executemany("insert or ignore into us_distances_haversine values (?, ?, ?)", data)
 con.commit()
 con.close()
