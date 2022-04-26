@@ -37,7 +37,6 @@ os.makedirs("data/haversine", exist_ok=True)
 
 for store_from in tqdm.tqdm(stores):
     data = []
-    # csvfile = open(f'data/haversine/{store_from[0]}.csv', 'w')
     for store_to in stores:
         data.append([store_from[0], store_to[0], getDistanceFromLatLonInKm(store_from[1], store_from[2], store_to[1], store_to[2])])
     
