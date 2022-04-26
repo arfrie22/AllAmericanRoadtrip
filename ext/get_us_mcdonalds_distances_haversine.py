@@ -33,14 +33,15 @@ for result in cur:
         result[1] 
     ])
 
-os.makedirs("data", exist_ok=True)
+os.makedirs("data/haversine", exist_ok=True)
 
-data = []
 for store_from in tqdm.tqdm(stores):
+    data = []
+    # csvfile = open(f'data/haversine/{store_from[0]}.csv', 'w')
     for store_to in stores:
         data.append([store_from[0], store_to[0], getDistanceFromLatLonInKm(store_from[1], store_from[2], store_to[1], store_to[2])])
     
     
-df = pd.DataFrame(data, columns = ['store_from', 'store_to', 'distance'])
-df.to_parquet('data/haversine/.csv')
+    df = pd.DataFrame(data, columns = ['store_from', 'store_to', 'distance'])
+    df.to_parquet(f'data/haversine/{store_from[0]}.csv')
     
