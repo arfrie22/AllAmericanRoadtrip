@@ -1,6 +1,9 @@
 import tqdm
 import sqlite3
+import pandas as pd
+import pyarrow
 import math
+import os
 
 def getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2):
     radius = 6371; # Radius of the earth in km
@@ -15,16 +18,8 @@ def deg2rad(deg):
   return deg * (math.pi/180)
 
 
-con = sqlite3.connect('../data/mc_donalds.db')
+con = sqlite3.connect('data/mc_donalds.db')
 cur = con.cursor()
-cur.execute('''
-create table if not exists us_distances_haversine (
-	id_from int not null,
-	id_to int not null,
-	distance double not null,
-    unique(id_from, id_to)
-);
-''')
 
 stores = []
 
@@ -38,17 +33,15 @@ for result in cur:
         result[1] 
     ])
 
-data = []
+os.makedirs("data/haversine", exist_ok=True)
 
 for store_from in tqdm.tqdm(stores):
+    data = []
+    # csvfile = open(f'data/haversine/{store_from[0]}.csv', 'w')
     for store_to in stores:
         data.append([store_from[0], store_to[0], getDistanceFromLatLonInKm(store_from[1], store_from[2], store_to[1], store_to[2])])
-
-        if len(data) > 10000:
-                cur.executemany("insert or ignore into us_distances_haversine values (?, ?, ?)", data)
-                con.commit()
-                data = []
-
-cur.executemany("insert or ignore into us_distances_haversine values (?, ?, ?)", data)
-con.commit()
-con.close()
+    
+    
+    df = pd.DataFrame(data, columns = ['store_from', 'store_to', 'distance'])
+    df.to_parquet(f'data/haversine/{store_from[0]}.csv')
+    
