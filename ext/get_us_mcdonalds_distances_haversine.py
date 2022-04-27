@@ -23,7 +23,7 @@ cur = con.cursor()
 
 stores = []
 
-cur.execute('select * from us')
+cur.execute("SELECT * FROM 'us' WHERE sub_division IN ('ME', 'NH', 'VT', 'MA', 'CT', 'RI');")
 
 
 for result in cur:
@@ -35,12 +35,12 @@ for result in cur:
 
 os.makedirs("data/haversine", exist_ok=True)
 
+data = []
 for store_from in tqdm.tqdm(stores):
-    data = []
     for store_to in stores:
         data.append([store_from[0], store_to[0], getDistanceFromLatLonInKm(store_from[1], store_from[2], store_to[1], store_to[2])])
     
     
-    df = pd.DataFrame(data, columns = ['store_from', 'store_to', 'distance'])
-    df.to_parquet(f'data/haversine/{store_from[0]}.csv')
+df = pd.DataFrame(data, columns = ['store_from', 'store_to', 'distance'])
+df.to_parquet('data/haversine.csv')
     
