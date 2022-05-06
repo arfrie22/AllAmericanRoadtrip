@@ -35,6 +35,6 @@ with tqdm.tqdm(total=len(stores)) as pbar:
     
 
 df = pd.DataFrame(paths, columns = ['path', 'length'])
-df.to_parquet('data/stores.csv')
+df.to_parquet('data/greedy.csv')
     
     
