@@ -68,12 +68,9 @@ for path in tqdm.tqdm(paths.to_numpy()[0:20]):
 
     for line in lines:
         line.remove()
-# build gif
-with imageio.get_writer('mygif.gif', mode='I') as writer:
-    for filename in filenames:
-        image = imageio.imread(filename)
-        writer.append_data(image)
-        
+# build video
+os.system("ffmpeg -framerate 30 -i frames/%d.png -c:v libx264 -r 30 output.mp4")
+
 # Remove files
 for filename in set(filenames):
     os.remove(filename)

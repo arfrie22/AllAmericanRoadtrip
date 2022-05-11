@@ -34,7 +34,8 @@ with tqdm.tqdm(total=len(stores)) as pbar:
 
     
 
+os.makedirs('data/unproc', exist_ok=True)
 df = pd.DataFrame(paths, columns = ['path', 'length'])
-df.to_parquet('data/greedy.csv')
+df.to_parquet('data/unproc/greedy.csv')
     
     
