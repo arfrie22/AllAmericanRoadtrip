@@ -10,7 +10,7 @@ import tqdm
 
 
 stores = pd.read_parquet('data/stores.csv')
-paths = pd.read_parquet('data/greedy.csv')
+paths = pd.read_parquet('data/unproc/greedy.csv')
 
 os.makedirs('frames', exist_ok=True)  
 data = mpl.image.imread('data/world.200412.3x5400x2700.jpg')
