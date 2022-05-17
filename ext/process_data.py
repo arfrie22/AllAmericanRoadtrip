@@ -15,23 +15,21 @@ def generate_data(algo):
     i = 0
 
     data = []
-    for path in tqdm.tqdm(df.to_numpy()[0:20]):
+    for path in tqdm.tqdm(df.to_numpy()):
         x = []
         y = []
 
         for store in path[0]:
-            x.append(stores[stores['store_id'] == store]['long'])
-            y.append(stores[stores['store_id'] == store]['lat'])
+            x.append(stores[stores['store_id'] == store].iloc[0, :]['long'])
+            y.append(stores[stores['store_id'] == store].iloc[0, :]['lat'])
     
         if path[1] < shorest_path_length or shorest_path == None:
                 shorest_path = [x, y]
                 shorest_path_length = path[1]
 
-        data.append([[x,y], shorest_path, shorest_path_length])
-        # print([[x,y], path[1], shorest_path, shorest_path_length])
+        data.append([[x,y], path[1], shorest_path, shorest_path_length])
 
     out = pd.DataFrame(data, columns = ['path', 'length', 'shorest_path', 'shorest_legnth'])
-    print(out)
     out.to_parquet(f'data/proc/{algo}')
 
 
@@ -40,7 +38,6 @@ os.makedirs('data/proc', exist_ok=True)
 
 with tqdm.tqdm(total=len(algos)) as pbar:
         # with ThreadPoolExecutor(max_workers=len(stores)) as ex:
-        generate_data(algos[0])
         with ThreadPoolExecutor(max_workers=5) as ex:
             futures = [ex.submit(generate_data, algo) for algo in algos]
             for future in as_completed(futures):
