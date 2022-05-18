@@ -55,7 +55,7 @@ def render_video(algo):
     filenames = []
     with tqdm.tqdm(total=len(paths.index)) as pbar:
         # with ThreadPoolExecutor(max_workers=len(stores)) as ex:
-        with ThreadPoolExecutor(max_workers=1) as ex:
+        with ThreadPoolExecutor(max_workers=10) as ex:
             futures = [ex.submit(generate_frame, data, algo, index) for index, data in paths.iterrows()]
             for future in as_completed(futures):
                 filenames.append(future.result())
