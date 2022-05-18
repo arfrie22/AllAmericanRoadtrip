@@ -5,40 +5,44 @@ import pyarrow
 import math
 import os
 import matplotlib as mpl
-from matplotlib import pyplot as plt
+import matplotlib.pyplot as plt
 import numpy as np
 import os
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 stores = pd.read_parquet(f'data/stores.csv')
-data = mpl.image.imread('data/world.200412.3x5400x2700.jpg')
+image = mpl.image.imread('data/world.200412.3x5400x2700.jpg')
 # PIL.Image.MAX_IMAGE_PIXELS = None
 # data = image.imread('data/Full Map.jpg')
-height = len(data)
-width = len(data[0])
-
-plt.figure(figsize=(width/100, height/100))
+height = len(image)
+width = len(image[0])
+mpl.use('agg')
 
 stores['x'] = ((stores.to_numpy()[:,2] + 180) / 360) * width
 stores['y'] = ((90 - stores.to_numpy()[:,1]) / 180) * height 
 points = np.array(stores.to_numpy())
 
-def generate_frame(data, algo, index):
-        for point in points:
-            plt.plot(point[3], point[4], marker='v', color="red")
 
-        plt.imshow(data)
-        plt.ylim([points[:, 4].min(), points[:, 4].max()])
-        plt.xlim([points[:, 3].min(), points[:, 3].max()])
-            
-        plt.plot(x, y, color = 'blue', linewidth=3, linestyle='-.')
-        plt.plot(shorest_path[0], shorest_path[1], color = 'green', linewidth=1, linestyle='-.')
+def generate_frame(data, algo, index):
+        # fig = plt.figure(figsize=(width/100, height/100))
+        fig = plt.figure()
+        splt = fig.add_subplot()
+        splt.imshow(image)
+        for point in points:
+            splt.plot(point[3], point[4], marker='v', color="red")
+
+        # splt.ylim([points[:, 4].min(), points[:, 4].max()])
+        # splt.xlim([points[:, 3].min(), points[:, 3].max()])
+        
+        splt.plot(data["path"][0], data["path"][1], color = 'blue', linewidth=3, linestyle='-.')
+        splt.plot(data["shorest_path"][0], data["shorest_path"][1], color = 'green', linewidth=1, linestyle='-.')
 
         # create file name and append it to a list
         filename = f'frames/{algo.replace(".csv", "")}/{index}.png'
         
         # save frame
-        plt.savefig(filename, dpi=100)
+        splt.savefig(filename, dpi=100)
+        plt.close(fig)
         return filename
 
 
@@ -52,7 +56,7 @@ def render_video(algo):
     filenames = []
     with tqdm.tqdm(total=len(paths.index)) as pbar:
         # with ThreadPoolExecutor(max_workers=len(stores)) as ex:
-        with ThreadPoolExecutor(max_workers=5) as ex:
+        with ThreadPoolExecutor(max_workers=1) as ex:
             futures = [ex.submit(generate_frame, data, algo, index) for index, data in paths.iterrows()]
             for future in as_completed(futures):
                 filenames.append(future.result())
