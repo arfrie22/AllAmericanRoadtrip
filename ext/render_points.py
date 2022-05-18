@@ -43,7 +43,7 @@ def generate_frame(data, algo, index):
         
         # save frame
         extent = splt.get_window_extent().transformed(fig.dpi_scale_trans.inverted())
-        fig.savefig(filename, bbox_inches=extent, dpi=100)
+        fig.savefig(filename, bbox_inches=extent.expanded(0.8, 1.0), dpi=100)
 
         plt.close(fig)
         return filename
