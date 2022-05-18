@@ -24,24 +24,23 @@ points = np.array(stores.to_numpy())
 
 
 def generate_frame(data, algo, index):
-        # fig = plt.figure(figsize=(width/100, height/100))
-        fig = plt.figure()
+        fig = plt.figure(figsize=(width/100, height/100))
         splt = fig.add_subplot()
         splt.imshow(image)
         for point in points:
             splt.plot(point[3], point[4], marker='v', color="red")
 
-        # splt.ylim([points[:, 4].min(), points[:, 4].max()])
-        # splt.xlim([points[:, 3].min(), points[:, 3].max()])
+        splt.set_ylim([points[:, 4].min(), points[:, 4].max()])
+        splt.set_xlim([points[:, 3].min(), points[:, 3].max()])
         
-        splt.plot(data["path"][0], data["path"][1], color = 'blue', linewidth=3, linestyle='-.')
-        splt.plot(data["shorest_path"][0], data["shorest_path"][1], color = 'green', linewidth=1, linestyle='-.')
+        splt.plot(((data["path"][0] + 180) / 360) * width, ((90 - data["path"][1]) / 180) * height, color = 'blue', linewidth=3, linestyle='-.')
+        splt.plot(((data["shorest_path"][0] + 180) / 360) * width, ((90 - data["shorest_path"][1]) / 180) * height, color = 'green', linewidth=1, linestyle='-.')
 
         # create file name and append it to a list
         filename = f'frames/{algo.replace(".csv", "")}/{index}.png'
         
         # save frame
-        splt.savefig(filename, dpi=100)
+        fig.savefig(filename, dpi=100)
         plt.close(fig)
         return filename
 
