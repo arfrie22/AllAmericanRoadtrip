@@ -67,7 +67,7 @@ def render_video(algo):
     # for path in tqdm.tqdm(paths.to_numpy()[0:20]):
         
     # build video
-    os.system(f'ffmpeg -framerate 30 -i frames/{algo.replace(".csv", "")}/%d.png -c:v libx264 -r 30 output.mp4')
+    os.system(f'ffmpeg -framerate 30 -i frames/{algo.replace(".csv", "")}/%d.png -c:v libx264 -r 30 {algo.replace(".csv", "")}.mp4')
 
     # Remove files
     for filename in set(filenames):
