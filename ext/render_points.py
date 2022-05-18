@@ -24,6 +24,11 @@ points = np.array(stores.to_numpy())
 
 
 def generate_frame(data, algo, index):
+        filename = f'frames/{algo.replace(".csv", "")}/{index}.png'
+        if os.path.exists(filename):
+            return filename
+
+
         fig = plt.figure(figsize=(width/100, height/100))
         splt = fig.add_subplot()
         splt.imshow(image)
@@ -35,12 +40,11 @@ def generate_frame(data, algo, index):
         
         splt.plot(((data["path"][0] + 180) / 360) * width, ((90 - data["path"][1]) / 180) * height, color = 'blue', linewidth=3, linestyle='-.')
         splt.plot(((data["shorest_path"][0] + 180) / 360) * width, ((90 - data["shorest_path"][1]) / 180) * height, color = 'green', linewidth=1, linestyle='-.')
-
-        # create file name and append it to a list
-        filename = f'frames/{algo.replace(".csv", "")}/{index}.png'
         
         # save frame
-        fig.savefig(filename, dpi=100)
+        extent = splt.get_window_extent().transformed(fig.dpi_scale_trans.inverted())
+        fig.savefig(filename, bbox_inches=extent, dpi=100)
+
         plt.close(fig)
         return filename
 
