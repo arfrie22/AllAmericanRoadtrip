@@ -17,6 +17,7 @@ image = mpl.image.imread('data/world.200412.3x5400x2700.jpg')
 height = len(image)
 width = len(image[0])
 mpl.use('agg')
+fps = 15
 
 stores['x'] = ((stores.to_numpy()[:,2] + 180) / 360) * width
 stores['y'] = ((90 - stores.to_numpy()[:,1]) / 180) * height 
@@ -45,7 +46,7 @@ def generate_frame(data, algo, index):
         
         # save frame
         extent = splt.get_window_extent().transformed(fig.dpi_scale_trans.inverted())
-        fig.savefig(filename, bbox_inches=extent.expanded(1.0, 1.0), dpi=100)
+        fig.savefig(filename, bbox_inches=extent.expanded(1.0, 1.0), dpi=10)
 
         plt.close(fig)
         return filename
@@ -69,7 +70,7 @@ def render_video(algo):
     # for path in tqdm.tqdm(paths.to_numpy()[0:20]):
         
     # build video
-    os.system(f'ffmpeg -framerate 30 -i frames/{algo.replace(".csv", "")}/%d.png -c:v libx264 -r 30 {algo.replace(".csv", "")}.mp4')
+    os.system(f'ffmpeg -framerate {fps} -i frames/{algo.replace(".csv", "")}/%d.png -c:v libx264 -r {fps} {algo.replace(".csv", "")}.mp4')
 
     # Remove files
     # for filename in set(filenames):
