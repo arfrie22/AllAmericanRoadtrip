@@ -28,22 +28,24 @@ def generate_frame(data, algo, index):
         if os.path.exists(filename):
             return filename
 
+        y_range = [points[:, 4].min(), points[:, 4].max()]
+        x_range = [points[:, 3].min(), points[:, 3].max()]
 
-        fig = plt.figure(figsize=(width/100, height/100))
+        fig = plt.figure(figsize=((x_range[1] - x_range[0]), (y_range[1] - y_range[0])))
         splt = fig.add_subplot()
         splt.imshow(image)
         for point in points:
-            splt.plot(point[3], point[4], marker='v', color="red")
+            splt.plot(point[3], point[4], marker='v', color="red", markersize=40)
 
-        splt.set_ylim([points[:, 4].min(), points[:, 4].max()])
-        splt.set_xlim([points[:, 3].min(), points[:, 3].max()])
+        splt.set_ylim(y_range)
+        splt.set_xlim(x_range)
         
-        splt.plot(((data["path"][0] + 180) / 360) * width, ((90 - data["path"][1]) / 180) * height, color = 'blue', linewidth=3, linestyle='-.')
-        splt.plot(((data["shorest_path"][0] + 180) / 360) * width, ((90 - data["shorest_path"][1]) / 180) * height, color = 'green', linewidth=1, linestyle='-.')
+        splt.plot(((data["path"][0] + 180) / 360) * width, ((90 - data["path"][1]) / 180) * height, color='blue', linewidth=10, linestyle='-')
+        splt.plot(((data["shorest_path"][0] + 180) / 360) * width, ((90 - data["shorest_path"][1]) / 180) * height, color='green', linewidth=7, linestyle='-.')
         
         # save frame
         extent = splt.get_window_extent().transformed(fig.dpi_scale_trans.inverted())
-        fig.savefig(filename, bbox_inches=extent.expanded(0.8, 1.0), dpi=100)
+        fig.savefig(filename, bbox_inches=extent.expanded(1.0, 1.0), dpi=100)
 
         plt.close(fig)
         return filename
@@ -70,8 +72,8 @@ def render_video(algo):
     os.system(f'ffmpeg -framerate 30 -i frames/{algo.replace(".csv", "")}/%d.png -c:v libx264 -r 30 {algo.replace(".csv", "")}.mp4')
 
     # Remove files
-    for filename in set(filenames):
-        os.remove(filename)
+    # for filename in set(filenames):
+    #     os.remove(filename)
 
 
 algos = os.listdir('data/proc')
