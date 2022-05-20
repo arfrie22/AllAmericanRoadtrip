@@ -83,8 +83,8 @@ def render_video(algo):
                 pbar.update(1)
     filenames.append(generate_frame(paths.iloc[-1, :], algo, len(paths.index), final=True))
     # build video
-    os.makedirs('out', exist_ok=True)
-    os.system(f'ffmpeg -y -framerate {fps} -i frames/{algo.replace(".csv", "")}/%d.png -c:v libx264 -r {fps} out/{algo.replace(".csv", "")}.mp4')
+    os.makedirs('videos', exist_ok=True)
+    os.system(f'ffmpeg -y -framerate {fps} -i frames/{algo.replace(".csv", "")}/%d.png -c:v libx264 -r {fps} videos/{algo.replace(".csv", "")}.mp4')
 
     # Remove files
     # for filename in set(filenames):
